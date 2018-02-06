@@ -1,3 +1,0 @@
-/home/alisa/Documents/FrogPs/CMakeFiles/rebuild_cache.dir
-/home/alisa/Documents/FrogPs/CMakeFiles/main.dir
-/home/alisa/Documents/FrogPs/CMakeFiles/edit_cache.dir
