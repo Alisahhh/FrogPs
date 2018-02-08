@@ -31,11 +31,10 @@ void drawDetectLines(Mat& image,const vector<Vec4i>& lines,const Scalar & color,
        }
    }
    //imshow("image",image);
-   cout<<"OK"<<endl;
+   //cout<<"OK"<<endl;
 }
 
 int calc(double &x,double &y,Mat image,double lineSize){
-  cout<<lineSize<<endl;
   Mat contours;
   Canny(image,contours,125,350);
   threshold(contours,contours,128,255,THRESH_BINARY);
@@ -61,10 +60,23 @@ Mat select(){
     exit;
   }
   frog[1]=imread("./picture/frog2.jpg");
+  if(!frog[1].data){
+    printf("-1");
+    exit;
+  }
   frog[2]=imread("./picture/frog3.jpg");
+  if(!frog[2].data){
+    printf("-1");
+    exit;
+  }
   frog[3]=imread("./picture/frog4.jpg");
+  if(!frog[3].data){
+    printf("-1");
+    exit;
+  }
   int tmp=std::rand()%4;
   //imshow("frog",frog[0]);
+  //return imread("1.jpeg");
   return frog[tmp];
 }
 
@@ -81,12 +93,15 @@ int main(int argc, char** argv )
       printf("No image data \n");
       return -1;
     }
+    Mat background=imread("paper.jpeg",1);
+    Mat backGround;
+    resize(background,backGround,Size(image.cols+20,image.rows+20));
     //Mat imageTmp;
     //resize(image,imageTmp,Size(300,300),0,0);
     //imshow("imageTmp",imageTmp);
     //此处应该加一个对读入图片处理的过程，比如...放到指定的大小以方便和青蛙配对
     //我选择回来再
-    int minSize=min(image.rows,image.cols);
+    int minSize=min(image.cols,image.rows);
     Mat frog=select();
     Mat frogMask;
     Mat frogTmp;
@@ -96,15 +111,18 @@ int main(int argc, char** argv )
     //imshow("frogTmp",frogTmp);
     double x,y;
     int ifPlain=calc(x,y,image,minSize);
-    cout<<x<<" "<<y<<endl;
+    //cout<<x<<" "<<y<<endl;
     if(ifPlain==-1){
       std::cout<<"You frog can't take photo there"<<std::endl;
       return 0;
     }
     Mat ROI = image(cv::Rect(x,y,frogMask.cols,frogMask.rows));
     frogTmp.copyTo(ROI,frogMask);
-    imshow("Newfrog",image);
-    imwrite("Newfrog.jpg",image);
+    //imshow("Newfrog",image);
+    Mat Roi=backGround(cv::Rect(10,10,image.cols,image.rows));
+    image.copyTo(Roi);
+    imshow("backGround",backGround);
+    imwrite("Newfrog.jpg",backGround);
     waitKey(0);
     return 0;
     //waitKey(0);
